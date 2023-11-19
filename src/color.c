@@ -17,7 +17,7 @@
 
 #include "color.h"
 
-#include <limits.h>
+#include <float.h>
 #include <math.h>
 
 // ------------------------------------------------
@@ -40,10 +40,10 @@ struct ColorI *set_color_f(size_t index, struct ColorF *color)
 		return NULL;
 	}
 
-	g_color_table[index].r = color->r;
-	g_color_table[index].g = color->g;
-	g_color_table[index].b = color->b;
-	g_color_table[index].a = color->a;
+	g_color_table[index].r = (int) color->r;
+	g_color_table[index].g = (int) color->g;
+	g_color_table[index].b = (int) color->b;
+	g_color_table[index].a = (int) color->a;
 
 	return &g_color_table[index];
 }
@@ -55,10 +55,10 @@ struct ColorI *set_color_dec(size_t index, struct ColorF *color)
 		return NULL;
 	}
 
-	g_color_table[index].r = color->r * 255.0;
-	g_color_table[index].g = color->g * 255.0;
-	g_color_table[index].b = color->b * 255.0;
-	g_color_table[index].a = color->a * 255.0;
+	g_color_table[index].r = (int) color->r * 255;
+	g_color_table[index].g = (int) color->g * 255;
+	g_color_table[index].b = (int) color->b * 255;
+	g_color_table[index].a = (int) color->a * 255;
 
 	return &g_color_table[index];
 }
@@ -85,7 +85,7 @@ size_t get_colorset_size()
 size_t find_nearest_color_rgba(int r, int g, int b, int a)
 {
 	size_t nearest = 0;
-	int min_dist = INT_MAX;
+	double min_dist = DBL_MAX;
 
 	for (size_t i = 0; i < g_colorset_size; i++)
 	{
@@ -96,7 +96,7 @@ size_t find_nearest_color_rgba(int r, int g, int b, int a)
 		int b_dist = color->b - b;
 		int a_dist = color->a - a;
 
-		int dist = sqrt((r_dist * r_dist) + (g_dist * g_dist) + (b_dist * b_dist) + (a_dist * a_dist));
+		double dist = sqrt((r_dist * r_dist) + (g_dist * g_dist) + (b_dist * b_dist) + (a_dist * a_dist));
 
 		if (dist < min_dist)
 		{

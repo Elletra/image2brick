@@ -18,8 +18,9 @@
 #ifndef _IMAGE2BRICK_FILE_PATH_H
 #define _IMAGE2BRICK_FILE_PATH_H
 
-#include <limits.h>
 #include <stdbool.h>
+
+#include "defs.h"
 
 char *file_name(char *path);
 bool file_base(char *path, char buffer[PATH_MAX]);

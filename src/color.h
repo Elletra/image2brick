@@ -15,9 +15,6 @@
  * not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _IMAGE2BRICK_COLOR_H
-#define _IMAGE2BRICK_COLOR_H
-
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -56,5 +53,3 @@ size_t set_colorset_size(size_t size);
 size_t get_colorset_size();
 
 size_t find_nearest_color_rgba(int r, int g, int b, int a);
-
-#endif

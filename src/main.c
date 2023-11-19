@@ -23,12 +23,9 @@
 #define STBI_FAILURE_USERMSG
 #include "stb_image.h"
 
+#include "defs.h"
 #include "color.h"
 #include "file_path.h"
-
-#define LINE_BUFFER_SIZE 256
-#define MSG_PREFIX "[image2brick] "
-#define ERR_PREFIX MSG_PREFIX "Error: "
 
 #define WRITE_OR_CLOSE(file, format, ...) if (fprintf(file, format, __VA_ARGS__) < 0)\
 {\
@@ -62,10 +59,39 @@ bool write_macro_file(char *image_file_base, struct Image *image, struct Args *a
 
 int main(int argc, char **argv)
 {
-	struct Args args;
+	struct Args args =
+	{
+		.is_vertical = false,
+		.cli_mode = false,
+		.orientation_set = false,
+		.image_file_path = NULL,
+		.colorset_file_path = NULL
+	};
 
 	if (!parse_args(argc, argv, &args))
 	{
+		return 1;
+	}
+
+	char image_file_base[PATH_MAX];
+
+	if (!file_base(args.image_file_path, image_file_base))
+	{
+		printf(ERR_PREFIX "Failed to parse file path base\n");
+		pause(&args);
+		return 1;
+	}
+
+	char out_file_name[PATH_MAX];
+	snprintf(out_file_name, PATH_MAX, "%s_%s.txt", image_file_base, args.is_vertical ? "vert" : "horiz");
+
+	struct Image image;
+	image.data = stbi_load(args.image_file_path, &image.width, &image.height, &image.channels, 0);
+
+	if (image.data == NULL)
+	{
+		printf(ERR_PREFIX "Failed to open '%s' - %s\n", args.image_file_path, stbi_failure_reason());
+		pause(&args);
 		return 1;
 	}
 
@@ -76,17 +102,10 @@ int main(int argc, char **argv)
 
 	if (!parse_colorset(&args))
 	{
+		stbi_image_free(image.data);
 		printf(ERR_PREFIX "Could not open colorset file '%s'\n", args.colorset_file_path);
 		pause(&args);
-		return 1;
-	}
 
-	char image_file_base[PATH_MAX];
-
-	if (!file_base(args.image_file_path, image_file_base))
-	{
-		printf(ERR_PREFIX "Failed to parse file path base\n");
-		pause(&args);
 		return 1;
 	}
 
@@ -119,19 +138,6 @@ int main(int argc, char **argv)
 			while ((ch = getchar()) != '\n' && ch != EOF);
 		}
 		while (true);
-	}
-
-	char out_file_name[PATH_MAX];
-	snprintf(out_file_name, PATH_MAX, "%s_%s.txt", image_file_base, args.is_vertical ? "vert" : "horiz");
-
-	struct Image image;
-	image.data = stbi_load(args.image_file_path, &image.width, &image.height, &image.channels, 0);
-
-	if (image.data == NULL)
-	{
-		printf(ERR_PREFIX "Failed to open '%s' - %s\n", args.image_file_path, stbi_failure_reason());
-		pause(&args);
-		return 1;
 	}
 
 	if (!write_macro_file(image_file_base, &image, &args, out_file_name))
@@ -261,7 +267,7 @@ void display_help()
 		"    -c    Specifies the colorset file to use.\n"
 		"    -X    Makes the program operate as a command-line interface\n"
 		"          that takes no keyboard input and closes immediately\n"
-		"          upon completion.\n"
+		"          upon completion or failure.\n"
 		"\n"
 	);
 }
