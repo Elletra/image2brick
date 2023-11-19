@@ -3,3 +3,7 @@
 *.c text eol=lf
 *.h text eol=lf
 *.sh text eol=lf
+*.md text eol=lf
+
+.gitignore text eol=lf
+.gitattributes text eol=lf
