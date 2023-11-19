@@ -95,6 +95,13 @@
     <ClInclude Include="..\src\file_io.h" />
     <ClInclude Include="..\src\file_path.h" />
     <ClInclude Include="..\src\stb_image.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="image2brick.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
