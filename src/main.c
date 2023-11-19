@@ -51,12 +51,13 @@ struct Args
 	bool cli_mode;
 	bool orientation_set;
 	char *image_file_path;
+	char *colorset_file_path;
 };
 
 bool parse_args(int argc, char **argv, struct Args *args);
 void display_help();
 void pause(struct Args *args);
-bool parse_colorset();
+bool parse_colorset(struct Args *args);
 bool write_macro_file(char *image_file_base, struct Image *image, struct Args *args, char *out_file_name);
 
 int main(int argc, char **argv)
@@ -68,9 +69,14 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
-	if (!parse_colorset())
+	if (args.colorset_file_path == NULL || strlen(args.colorset_file_path) <= 0)
 	{
-		printf(ERR_PREFIX "Could not open 'colorSet.txt'\n");
+		args.colorset_file_path = "./colorSet.txt";
+	}
+
+	if (!parse_colorset(&args))
+	{
+		printf(ERR_PREFIX "Could not open colorset file '%s'\n", args.colorset_file_path);
 		pause(&args);
 		return 1;
 	}
@@ -178,6 +184,17 @@ bool parse_args(int argc, char **argv, struct Args *args)
 			args->orientation_set = true;
 			set_horizontal = true;
 		}
+		else if (!strcmp(arg, "-c"))
+		{
+			if (i >= argc - 1)
+			{
+				printf(ERR_PREFIX "Missing file name after '-c'\n");
+				return false;
+			}
+
+			args->colorset_file_path = argv[i + 1];
+			i++;
+		}
 		else if (!strcmp(arg, "-X"))
 		{
 			args->cli_mode = true;
@@ -188,7 +205,7 @@ bool parse_args(int argc, char **argv, struct Args *args)
 
 			if (strlen(arg) == 2)
 			{
-				if (arg[1] == 'V' || arg[1] == 'H')
+				if (arg[1] == 'V' || arg[1] == 'H' || arg[1] == 'C')
 				{
 					printf(ERR_PREFIX "Did you mean '-%c'?\n", tolower(arg[1]));
 				}
@@ -237,10 +254,11 @@ void display_help()
 {
 	printf(
 		"\n"
-		"usage: image2brick (-v | -h) [-X] image_file\n"
+		"usage: image2brick (-v | -h) [-c colorset_file] [-X] image_file\n"
 		"  options:\n"
 		"    -v    Specifies a vertical orientation.\n"
 		"    -h    Specifies a horizontal orientation.\n"
+		"    -c    Specifies the colorset file to use.\n"
 		"    -X    Makes the program operate as a command-line interface\n"
 		"          that takes no keyboard input and closes immediately\n"
 		"          upon completion.\n"
@@ -258,9 +276,9 @@ void pause(struct Args *args)
 	}
 }
 
-bool parse_colorset()
+bool parse_colorset(struct Args *args)
 {
-	FILE *file = fopen("./colorSet.txt", "r");
+	FILE *file = fopen(args->colorset_file_path, "r");
 
 	if (file == NULL)
 	{
