@@ -53,9 +53,6 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
-	char out_file_name[PATH_MAX];
-	snprintf(out_file_name, PATH_MAX, "%s_%s.txt", image_file_base, args.is_vertical ? "vert" : "horiz");
-
 	struct Image image;
 	image.data = stbi_load(args.image_file_path, &image.width, &image.height, &image.channels, 0);
 
@@ -83,6 +80,7 @@ int main(int argc, char **argv)
 	if (!args.orientation_set && !args.cli_mode)
 	{
 		int ch;
+		bool selected = false;
 
 		do
 		{
@@ -100,16 +98,28 @@ int main(int argc, char **argv)
 
 			if (ch == '1' || ch == '2')
 			{
-				while ((ch = getchar()) != '\n' && ch != EOF);
-				break;
+				selected = true;
+
+				args.is_vertical = ch == '1';
+				args.orientation_set = true;
+
+				while ((ch = getchar()) != '\n' && ch != EOF); // Clear out any remaining keypresses.
 			}
+			else
+			{
+				printf("\n" MSG_PREFIX "Invalid option.\n\n");
 
-			printf("\n" MSG_PREFIX "Invalid option.\n");
-
-			while ((ch = getchar()) != '\n' && ch != EOF);
+				if (ch != '\n')
+				{
+					while ((ch = getchar()) != '\n' && ch != EOF); // Clear out any remaining keypresses.
+				}
+			}
 		}
-		while (true);
+		while (!selected);
 	}
+
+	char out_file_name[PATH_MAX];
+	snprintf(out_file_name, PATH_MAX, "%s_%s.txt", image_file_base, args.is_vertical ? "vert" : "horiz");
 
 	if (!write_macro_file(image_file_base, &image, &args, out_file_name))
 	{
