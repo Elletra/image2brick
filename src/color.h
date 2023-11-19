@@ -1,7 +1,7 @@
 /**
  * image2brick: Convert images to Blockland macros.
  *
- * Copyright (C) 2023  Electrk
+ * Copyright (C) 2023 Electrk
  * 
  * This program is free software: you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation, either version 3 of the
@@ -14,6 +14,9 @@
  * You should have received a copy of the GNU General Public License along with this program. If
  * not, see <https://www.gnu.org/licenses/>.
  */
+
+#ifndef _IMAGE2BRICK_COLOR_H
+#define _IMAGE2BRICK_COLOR_H
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -53,3 +56,5 @@ size_t set_colorset_size(size_t size);
 size_t get_colorset_size();
 
 size_t find_nearest_color_rgba(int r, int g, int b, int a);
+
+#endif

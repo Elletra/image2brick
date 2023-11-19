@@ -82,13 +82,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\args.c" />
     <ClCompile Include="..\src\color.c" />
+    <ClCompile Include="..\src\file_io.c" />
     <ClCompile Include="..\src\file_path.c" />
     <ClCompile Include="..\src\main.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\args.h" />
     <ClInclude Include="..\src\color.h" />
     <ClInclude Include="..\src\defs.h" />
+    <ClInclude Include="..\src\file_io.h" />
     <ClInclude Include="..\src\file_path.h" />
     <ClInclude Include="..\src\stb_image.h" />
   </ItemGroup>
