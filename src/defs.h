@@ -8,7 +8,7 @@
 #ifdef _WIN32
 #include <windows.h>
 #define PATH_MAX MAX_PATH
-#elif defined linux
+#elif defined __linux__
 #include <limits.h>
 #endif
 
