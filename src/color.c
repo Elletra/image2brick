@@ -55,10 +55,10 @@ struct ColorI *set_color_dec(size_t index, struct ColorF *color)
 		return NULL;
 	}
 
-	g_color_table[index].r = (int) color->r * 255;
-	g_color_table[index].g = (int) color->g * 255;
-	g_color_table[index].b = (int) color->b * 255;
-	g_color_table[index].a = (int) color->a * 255;
+	g_color_table[index].r = (int) (color->r * 255.0);
+	g_color_table[index].g = (int) (color->g * 255.0);
+	g_color_table[index].b = (int) (color->b * 255.0);
+	g_color_table[index].a = (int) (color->a * 255.0);
 
 	return &g_color_table[index];
 }
