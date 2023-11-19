@@ -20,7 +20,7 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_FAILURE_USERMSG
-#include "stb_image.h"
+#include "lib/stb_image.h"
 
 #include "defs.h"
 #include "args.h"

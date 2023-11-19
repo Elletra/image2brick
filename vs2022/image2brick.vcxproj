@@ -94,7 +94,7 @@
     <ClInclude Include="..\src\defs.h" />
     <ClInclude Include="..\src\file_io.h" />
     <ClInclude Include="..\src\file_path.h" />
-    <ClInclude Include="..\src\stb_image.h" />
+    <ClInclude Include="..\src\lib\stb_image.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
