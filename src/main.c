@@ -32,6 +32,7 @@ int main(int argc, char **argv)
 {
 	struct Args args =
 	{
+		.display_help = false,
 		.is_vertical = false,
 		.cli_mode = false,
 		.orientation_set = false,
@@ -42,6 +43,12 @@ int main(int argc, char **argv)
 	if (!parse_args(argc, argv, &args))
 	{
 		return 1;
+	}
+
+	if (args.display_help)
+	{
+		display_help();
+		return 0;
 	}
 
 	char image_file_base[PATH_MAX];

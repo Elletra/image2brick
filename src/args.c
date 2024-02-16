@@ -33,11 +33,15 @@ bool parse_args(int argc, char **argv, struct Args *args)
 	{
 		char *arg = argv[i];
 
-		if (!strcmp(arg, "-v"))
+		if (!strcmp(arg, "-h"))
+		{
+			args->display_help = true;
+		}
+		else if (!strcmp(arg, "-V"))
 		{
 			if (set_horizontal)
 			{
-				printf(ERR_PREFIX "Orientation already set with '-h'\n");
+				printf(ERR_PREFIX "Orientation already set with '-H'\n");
 				return false;
 			}
 
@@ -45,11 +49,11 @@ bool parse_args(int argc, char **argv, struct Args *args)
 			args->orientation_set = true;
 			set_vertical = true;
 		}
-		else if (!strcmp(arg, "-h"))
+		else if (!strcmp(arg, "-H"))
 		{
 			if (set_vertical)
 			{
-				printf(ERR_PREFIX "Orientation already set with '-v'\n");
+				printf(ERR_PREFIX "Orientation already set with '-V'\n");
 				return false;
 			}
 
@@ -102,22 +106,25 @@ bool parse_args(int argc, char **argv, struct Args *args)
 		}
 	}
 
-	if (!set_image_file || args->image_file_path == NULL)
+	if (!args->display_help)
 	{
-		printf(ERR_PREFIX "No image file specified.\n");
-		display_help();
-		pause(args);
+		if (!set_image_file || args->image_file_path == NULL)
+		{
+			printf(ERR_PREFIX "No image file specified.\n\n");
+			display_help();
+			pause(args);
 
-		return false;
-	}
+			return false;
+		}
 
-	if (!set_vertical && !set_horizontal && args->cli_mode)
-	{
-		printf(ERR_PREFIX "No orientation specified.\n");
-		display_help();
-		pause(args);
+		if (!set_vertical && !set_horizontal && args->cli_mode)
+		{
+			printf(ERR_PREFIX "No orientation specified.\n\n");
+			display_help();
+			pause(args);
 
-		return false;
+			return false;
+		}
 	}
 
 	return true;
@@ -126,11 +133,11 @@ bool parse_args(int argc, char **argv, struct Args *args)
 void display_help()
 {
 	printf(
-		"\n"
-		"usage: image2brick (-v | -h) [-c colorset_file] [-X] image_file\n"
+		"usage: image2brick image_file [-h] (-V | -H) [-c colorset_file] [-X]\n"
 		"  options:\n"
-		"    -v    Specifies a vertical orientation.\n"
-		"    -h    Specifies a horizontal orientation.\n"
+		"    -h    Displays help.\n"
+		"    -V    Specifies a vertical orientation.\n"
+		"    -H    Specifies a horizontal orientation.\n"
 		"    -c    Specifies the colorset file to use.\n"
 		"    -X    Makes the program operate as a command-line interface\n"
 		"          that takes no keyboard input and closes immediately\n"

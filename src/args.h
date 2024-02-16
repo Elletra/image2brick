@@ -24,6 +24,7 @@
 
 struct Args
 {
+	bool display_help;
 	bool is_vertical;
 	bool cli_mode;
 	bool orientation_set;

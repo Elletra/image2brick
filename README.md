@@ -14,9 +14,11 @@ To use it normally, just drag an image file onto the program and select your ori
 
 ***
 
-You can also use it as a command-line program: `image2brick (-v | -h) [-c colorset_file] [-X] image_file`
+You can also use it as a command-line program: `usage: image2brick image_file [-h] (-V | -H) [-c colorset_file] [-X]`
 
-`-v` and `-h` options are the orientation that the macro will be in. The program requires you to specify at least one.
+`-h` displays help.
+
+`-V` and `-H` options are the orientation that the macro will be in. The program requires you to specify at least one.
 
 `-c` specifies the colorset file to use. If not specified, image2brick will look for `colorSet.txt` in the current working directory.
 
